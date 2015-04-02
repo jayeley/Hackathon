@@ -111,9 +111,9 @@ class Athlete
 		{
 			if ( $myTurn )
 			{
-				if ($match->_dodge < rand(1, 100))
+				if ($match->_dodge < mt_rand(1, 100))
 				{
-					$realDamage = $this->_critical >= rand(1, 100) ? 2 * $this->_damage : $this->_damage;
+					$realDamage = $this->_critical >= mt_rand(1, 100) ? 2 * $this->_damage : $this->_damage;
 					$match->healthRemain -= $realDamage;
 				}
 
@@ -121,9 +121,9 @@ class Athlete
 			}
 			else
 			{
-				if ($this->_dodge < rand(1, 100))
+				if ($this->_dodge < mt_rand(1, 100))
 				{
-					$realDamage = $match->_critical >= rand(1, 100) ? 2 * $match->_damage : $match->_damage;
+					$realDamage = $match->_critical >= mt_rand(1, 100) ? 2 * $match->_damage : $match->_damage;
 					$this->healthRemain -= $realDamage;
 				}
 
