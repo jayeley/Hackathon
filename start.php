@@ -51,10 +51,16 @@ class Game
 		}
 
 		arsort($result);
-		print_r($result);
+		
+		echo "\n\n======================================================\n";
+		echo "                      Final result\n";
+		echo "======================================================\n";
+		foreach($result as $name => $triumph)
+		{
+		    echo "$name win $triumph match(s)\n";
+		}
 	}
 }
-
 
 class Athlete
 {
@@ -82,22 +88,30 @@ class Athlete
 
 	public function attack( Athlete $match = null )
 	{
-		echo $this->_name.' VS '.$match->_name."\n";
 		$this->healthRemain = $this->_health;
 		$match->healthRemain = $match->_health;
+		
+		$rount = 1;
+		echo "\n==========================================================\n";
+		echo "<".$this->_name.'> VS <'.$match->_name."> Start!!! \n";
+		echo "==========================================================\n";
 
 		while ( $this->healthRemain > 0 && $match->healthRemain > 0 )
 		{
+		    echo "\n----- <".$this->_name.'> VS <'.$match->_name."> Round - $rount\n";
 			$this->roundStart( $match );
+			$rount++;
 		}
 
 		if ($this->healthRemain <= 0)
 		{
 			$match->triumph++;
+			echo "\n*********** <".$match->_name."> is winnter ***********\n";
 		}
 		else
 		{
 			$this->triumph++;
+			echo "\n*********** <".$this->_name."> is winnter ***********\n";
 		}
 	}
 
@@ -106,32 +120,45 @@ class Athlete
 		$myTurn = $this->_initiative > $match->_initiative;
 		$myAttacks = $this->_attacks;
 		$matchAttacks = $match->_attacks;
-
+        
 		while ( $this->healthRemain > 0 && $match->healthRemain > 0 && ($myAttacks || $matchAttacks) )
 		{
 			if ( $myTurn )
 			{
+			    echo '<'.$this->_name.'> hits <'.$match->_name.'>';
 				if ($match->_dodge < mt_rand(1, 100))
 				{
-					$realDamage = $this->_critical >= mt_rand(1, 100) ? 2 * $this->_damage : $this->_damage;
+				    $critical = $this->_critical >= mt_rand(1, 100);
+					$realDamage = $critical ? 2 * $this->_damage : $this->_damage;
 					$match->healthRemain -= $realDamage;
+					echo " with $realDamage damage, ".($critical ? 'CRITICAL!!! ' : '').$match->healthRemain." remain\n";
+				}
+				else
+				{
+				    echo " DODGE!!! ".$match->healthRemain." remain\n";
 				}
 
 				$myAttacks--;
+				if ($matchAttacks) $myTurn = !$myTurn;
 			}
 			else
 			{
+			    echo '<'.$match->_name.'> hits <'.$this->_name.'>';
 				if ($this->_dodge < mt_rand(1, 100))
 				{
-					$realDamage = $match->_critical >= mt_rand(1, 100) ? 2 * $match->_damage : $match->_damage;
+				    $critical = $match->_critical >= mt_rand(1, 100);
+					$realDamage = $critical ? 2 * $match->_damage : $match->_damage;
 					$this->healthRemain -= $realDamage;
+					echo " with $realDamage damage, ".($critical ? 'CRITICAL!!! ' : '').$this->healthRemain." remain\n";
+				}
+				else
+				{
+				    echo " DODGE!!! ".$this->healthRemain." remain\n";
 				}
 
 				$matchAttacks--;
+				if ($myAttacks) $myTurn = !$myTurn;
 			}
-
-			$myTurn = !$myTurn;
 		}
 	}
 }
-
