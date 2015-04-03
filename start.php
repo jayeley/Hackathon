@@ -83,7 +83,6 @@ class Athlete
 		$this->_dodge 		= intval($property[4]);
 		$this->_critical 	= intval($property[5]);
 		$this->_initiative 	= intval($property[6]);
-
 	}
 
 	public function attack( Athlete $match = null )
